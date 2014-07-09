@@ -1,0 +1,21 @@
+{
+  "uuid": "6757949a-62f3-44e3-9627-9c84a4f04fa4",
+  "shortName": "ININ",
+  "longName": "Interactive Intelligence",
+  "companyName": "KeepFlying",
+  "versionCode": 1,
+  "versionLabel": "1.0.0",
+  "watchapp": {
+    "watchface": true
+  },
+  "appKeys": {},
+  "resources": {
+    "media": [
+      {
+        "type": "png-trans",
+        "name": "LOGO",
+        "file": "images/inin.png"
+      }
+    ]
+  }
+}
