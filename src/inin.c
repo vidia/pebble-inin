@@ -5,12 +5,12 @@
 Window *window; // All apps must have at least one window
 TextLayer *time_layer; // The clock
 
-static BitmapLayer *inin_layer;
-
 static GBitmap *foreground_image;
 static GBitmap *background_image;
 static BitmapLayer *foreground_image_layer;
 static BitmapLayer *background_image_layer;
+
+static GFont font; 
 
 // Called once per second
 static void handle_second_tick(struct tm* tick_time, TimeUnits units_changed) {
@@ -38,17 +38,17 @@ static void do_init(void) {
 
   Layer *window_layer = window_get_root_layer(window);
 
+  font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_MAIN_60)); 
+
   // Init the text layer used to show the time
-  time_layer = text_layer_create(GRect(0, 100, 144 /* width */, 168-100 /* height */));
+  time_layer = text_layer_create(GRect(0, 85, 144 /* width */, 168-85 /* height */));
   text_layer_set_text_color(time_layer, GColorWhite);
   text_layer_set_background_color(time_layer, GColorClear);
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
-  text_layer_set_font(time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
+  text_layer_set_font(time_layer, font);
 
   foreground_image = gbitmap_create_with_resource(RESOURCE_ID_LOGO_FORE);
   background_image = gbitmap_create_with_resource(RESOURCE_ID_LOGO_BACK);
-
-  GRect bounds = layer_get_bounds(window_layer);
 
   GRect image_frame = GRect(0, 0, 144, 100); 
 
@@ -83,6 +83,7 @@ static void do_deinit(void) {
   bitmap_layer_destroy(background_image_layer);
   gbitmap_destroy(foreground_image);
   gbitmap_destroy(background_image);
+  fonts_unload_custom_font(font); 
 }
 
 // The main event/run loop for our app
