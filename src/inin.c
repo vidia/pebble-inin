@@ -7,8 +7,6 @@ TextLayer *time_layer; // The clock
 
 static BitmapLayer *inin_layer;
 
-static InverterLayer *inverter_layer; 
-
 static GBitmap *foreground_image;
 static GBitmap *background_image;
 static BitmapLayer *foreground_image_layer;
@@ -47,24 +45,19 @@ static void do_init(void) {
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
   text_layer_set_font(time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_BOLD));
 
-  
-  inverter_layer = inverter_layer_create(GRect(0, 0, 144, 100));
-
-  //layer_add_child(window_layer, inverter_layer_get_layer(inverter_layer));
-
-
-  foreground_image = gbitmap_create_with_resource(RESOURCE_ID_LOGO_WHITE);
-  background_image = gbitmap_create_with_resource(RESOURCE_ID_LOGO_BLACK);
+  foreground_image = gbitmap_create_with_resource(RESOURCE_ID_LOGO_FORE);
+  background_image = gbitmap_create_with_resource(RESOURCE_ID_LOGO_BACK);
 
   GRect bounds = layer_get_bounds(window_layer);
 
-  const GPoint center = grect_center_point(&bounds);
-
-  //GRect image_frame = (GRect) { .origin = center, .size = foreground_image->bounds.size };
-  //image_frame.origin.x -= foreground_image->bounds.size.w/2;
- // image_frame.origin.y -= foreground_image->bounds.size.h/2;
-
   GRect image_frame = GRect(0, 0, 144, 100); 
+
+  // Use GCompOpClear to display the black portions of the image
+  background_image_layer = bitmap_layer_create(image_frame);
+  bitmap_layer_set_bitmap(background_image_layer, background_image);
+  //bitmap_layer_set_compositing_mode(background_image_layer, GCompOpSet);
+  layer_add_child(window_layer, bitmap_layer_get_layer(background_image_layer));
+
 
   // Use GCompOpOr to display the white portions of the image
   foreground_image_layer = bitmap_layer_create(image_frame);
@@ -72,11 +65,6 @@ static void do_init(void) {
   bitmap_layer_set_compositing_mode(foreground_image_layer, GCompOpOr);
   layer_add_child(window_layer, bitmap_layer_get_layer(foreground_image_layer));
 
-  // Use GCompOpClear to display the black portions of the image
-  background_image_layer = bitmap_layer_create(image_frame);
-  bitmap_layer_set_bitmap(background_image_layer, background_image);
-  bitmap_layer_set_compositing_mode(background_image_layer, GCompOpOr);
-  layer_add_child(window_layer, bitmap_layer_get_layer(background_image_layer));
 
   // Ensures time is displayed immediately (will break if NULL tick event accessed).
   // (This is why it's a good idea to have a separate routine to do the update itself.)
@@ -91,7 +79,6 @@ static void do_init(void) {
 static void do_deinit(void) {
   text_layer_destroy(time_layer);
   window_destroy(window);
-  inverter_layer_destroy(inverter_layer); 
   bitmap_layer_destroy(foreground_image_layer);
   bitmap_layer_destroy(background_image_layer);
   gbitmap_destroy(foreground_image);
