@@ -3,8 +3,8 @@
   "shortName": "ININ",
   "longName": "Interactive Intelligence",
   "companyName": "KeepFlying",
-  "versionCode": 2,
-  "versionLabel": "1.2.0",
+  "versionCode": 3,
+  "versionLabel": "2.0.0",
   "watchapp": {
     "watchface": true
   },
@@ -24,7 +24,7 @@
       }, 
       {
         "type": "font", 
-        "name": "FONT_MAIN_60", 
+        "name": "FONT_MAIN_18", 
         "file": "fonts/MatrixLining_Regular.ttf"
       }
     ]
